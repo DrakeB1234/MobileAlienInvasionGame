@@ -3,13 +3,20 @@ using UnityEngine;
 public class ParrallaxController : MonoBehaviour
 {
     [SerializeField]
-    private float speed;
-    [SerializeField]
     private float depth;
     [SerializeField]
     private float maxXPos;
     [SerializeField]
     private float minXPos;
+
+    private PlayerController playerController;
+    private float speed;
+
+    private void Start() 
+    {
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        speed = playerController.speed;
+    }
 
     private void Update() 
     {

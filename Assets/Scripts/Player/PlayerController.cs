@@ -26,7 +26,9 @@ public class PlayerController : MonoBehaviour
 
     private void Awake() 
     {
-        jumpHoldTimer = jumpHoldTime;    
+        jumpHoldTimer = jumpHoldTime;   
+
+        Application.targetFrameRate = 60; 
     }
 
     private void Update() 
