@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class Player : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [SerializeField] 
     private Rigidbody2D rb;
     [SerializeField] 
-    private float speed;
+    private Animator characterAnimator;
+    [SerializeField] 
+    private UIController uiController;
+    public float speed;
     [SerializeField] 
     private float jumpForce;
     [SerializeField] 
@@ -18,6 +21,8 @@ public class Player : MonoBehaviour
 
     private bool jumpHold;
     private float jumpHoldTimer;
+
+    public float distance;
 
     private void Awake() 
     {
@@ -38,6 +43,16 @@ public class Player : MonoBehaviour
                 jumpHold = false;
             }
         }    
+
+        if (rb.velocity.y == 0)
+        {
+            // Set bool for jump animation
+            characterAnimator.SetBool("isJumping", false);
+        }
+
+        // Updates public distance variable by speed, call function to update UI
+        distance += speed * Time.deltaTime;
+        uiController.UpdateDistance(distance);
     }
 
     public void PlayerJump(InputAction.CallbackContext context)
@@ -45,6 +60,11 @@ public class Player : MonoBehaviour
         if (context.performed && IsGrounded())
         {
             jumpHold = true;
+
+            // Set bool for jump animation
+            characterAnimator.SetBool("isJumping", true);
+            // Trigger jump animation
+            characterAnimator.SetTrigger("Jump");
 
             // Resets jump timer for longer jumps
             jumpHoldTimer = jumpHoldTime;
@@ -58,6 +78,6 @@ public class Player : MonoBehaviour
 
     public bool IsGrounded()
     {
-        return Physics2D.OverlapCircle(groundPos.position, 0.1f, groundLayer);
+        return Physics2D.OverlapCircle(groundPos.position, 0.2f, groundLayer);
     }
 }
