@@ -34,7 +34,7 @@ public class ObstacleController : MonoBehaviour
     {
         var genNum = Random.Range(0, obstacleObjLength);
         var obj = Instantiate(obstacleObj[genNum], gameObject.transform);
-        obj.GetComponent<ObstacleRock>().speed = playerController.speed;
+        obj.GetComponent<ObstacleMover>().speed = playerController.speed;
 
         // Randomly flip rocks
         if (isRockFlipped)

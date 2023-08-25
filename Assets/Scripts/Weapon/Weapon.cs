@@ -15,13 +15,15 @@ public class Weapon : MonoBehaviour
     public int weaponDamage;
 
     private UIController uiController;
+    private Animator animator;
     private int clipSize;
     private bool reload;
 
     private void Awake() 
     {
-        // Get uiController
+        // Get components
         uiController = GameObject.Find("CanvasUI").GetComponent<UIController>();
+        animator = GetComponent<Animator>();
 
         clipSize = clipMax;    
     }
@@ -39,8 +41,9 @@ public class Weapon : MonoBehaviour
         {
             clipSize--;
 
-            // Update UI
+            // Update UI / play animation
             uiController.UpdateAmmo(clipSize);
+            animator.SetTrigger("fireWeapon");
 
             // Create projectile and gun point pos
             Instantiate(projectilePrefab, gunPointPos.position, Quaternion.identity);

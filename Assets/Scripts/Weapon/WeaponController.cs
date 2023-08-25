@@ -13,7 +13,6 @@ public class WeaponController : MonoBehaviour
     [HideInInspector]
     public Weapon currentWeaponScript;
     
-    // Start is called before the first frame update
     private void Awake()
     {
         // Start player with pistol

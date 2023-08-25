@@ -1,8 +1,15 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject pauseUI;
+    [SerializeField]
+    private Button pauseButton;
+    [SerializeField]
+    private Button resumeButton;
     [SerializeField]
     private TextMeshProUGUI distanceText;
     [SerializeField]
@@ -14,15 +21,18 @@ public class UIController : MonoBehaviour
     [SerializeField]
     private GameObject ammoImageObj;
 
+    private GameObject player;
     private PlayerHealth playerHealth;
     private Weapon weapon;
-
     
-    // Start is called before the first frame update
-    void Awake()
+    private void Start()
     {
-        playerHealth = GameObject.Find("Player").GetComponent<PlayerHealth>();
-        weapon = GameObject.Find("Player").GetComponent<WeaponController>().currentWeaponObj.GetComponent<Weapon>();
+        player = GameObject.Find("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        weapon = player.GetComponent<WeaponController>().currentWeaponScript;
+
+        // Ensure pause menu is closed
+        pauseUI.SetActive(false);
 
         // Add health objs to player UI
         for (int i = 0; i < playerHealth.lifeMax; i++)
@@ -35,6 +45,22 @@ public class UIController : MonoBehaviour
         {
             Instantiate(ammoImageObj, ammoRow.transform);
         }
+    }
+
+    public void PauseGame()
+    {
+        Time.timeScale = 0;
+        resumeButton.Select();
+
+        pauseUI.SetActive(true);
+    }
+
+    public void UnPauseGame()
+    {
+        Time.timeScale = 1;
+        pauseButton.Select();
+
+        pauseUI.SetActive(false);
     }
 
     public void UpdateDistance(float distance)
