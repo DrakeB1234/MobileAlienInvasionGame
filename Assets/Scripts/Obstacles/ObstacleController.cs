@@ -4,15 +4,20 @@ using UnityEngine;
 public class ObstacleController : MonoBehaviour
 {
     [SerializeField]
-    private GameObject obstacleObj;
+    private GameObject[] obstacleObj;
     [SerializeField]
     private PlayerController playerController;
     [SerializeField]
     private float spawnDelay;
+
+    private int obstacleObjLength;
+    private bool isRockFlipped;
     
     // Start is called before the first frame update
     void Start()
     {
+        obstacleObjLength = obstacleObj.Length;
+
         StartCoroutine("SpawnTimer");
     }
 
@@ -21,13 +26,22 @@ public class ObstacleController : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(spawnDelay);
-            SpawnObstacle();   
+            SpawnObstacleRocks();   
         }
     }
 
-    public void SpawnObstacle()
+    public void SpawnObstacleRocks()
     {
-        var obj = Instantiate(obstacleObj, gameObject.transform);
-        obj.GetComponent<Obstacle>().speed = playerController.speed;
+        var genNum = Random.Range(0, obstacleObjLength);
+        var obj = Instantiate(obstacleObj[genNum], gameObject.transform);
+        obj.GetComponent<ObstacleRock>().speed = playerController.speed;
+
+        // Randomly flip rocks
+        if (isRockFlipped)
+        {
+            obj.transform.localScale = new Vector2(-1, 1);
+        }
+
+        isRockFlipped = !isRockFlipped;
     }
 }

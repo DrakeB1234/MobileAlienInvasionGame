@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Obstacle : MonoBehaviour
+public class ObstacleRock : MonoBehaviour
 {
     [SerializeField]
     private float destroyTime;
@@ -8,15 +8,19 @@ public class Obstacle : MonoBehaviour
     private float minY;
     [SerializeField]
     private float maxY;
-
+    
     public float speed;
+
+    private Animator animator;
 
     private void Start() 
     {
-        Invoke("Destroy", destroyTime);  
+        animator = gameObject.transform.GetChild(0).GetComponent<Animator>();
 
         // Set position of y to random value between min and max Y
         transform.position = new Vector2(transform.position.x, Random.Range(minY, maxY)); 
+
+        Invoke("Destroy", destroyTime);  
     }
     
     // Update is called once per frame
@@ -30,6 +34,9 @@ public class Obstacle : MonoBehaviour
         if (col.CompareTag("Player"))
         {
             col.GetComponent<PlayerHealth>().TakeDamage();
+            
+            // Player destroyed animation, obj will be destroyed later by invoked method "Destroy"
+            animator.SetTrigger("Destroyed");
         }
     }
 
